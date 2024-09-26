@@ -1,0 +1,23 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #fff;
+}
+
+.container{
+  max-width: 80vw;
+  margin: 0 auto;
+}
+
+.main{
+  margin-top: 5%;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+

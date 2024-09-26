@@ -1,0 +1,68 @@
+.wrapper__card {
+  background-color: rgba(171, 171, 171, 0.5019607843);
+  border-radius: 15px;
+  width: 20vw;
+  height: 44vh;
+  padding: 0.5% 2% 2% 2.5%;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 1% 0 0 3%;
+  margin-top: 6%;
+  height: 40vh;
+  width: 100%;
+}
+.card__name {
+  margin-top: 15px;
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 5%;
+  width: 100%;
+}
+.card__search {
+  width: 90%;
+  border: none;
+  border-bottom: 3px solid #ababab;
+  padding: 0 0 1% 40px;
+  font-size: 1.2em;
+}
+.card__body > div {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.card__body > div > p {
+  margin-left: 20px;
+}
+.card__body > div:last-child > p {
+  padding-right: 25%;
+  padding-bottom: 4%;
+  border-bottom: 3px solid #ababab;
+}
+.card__body > div {
+  font-size: 1.2em;
+  margin-top: 5%;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 1366px) {
+  .wrapper {
+    background-color: rgba(171, 171, 171, 0.5019607843);
+    border-radius: 15px;
+    width: 40%;
+    padding: 0.5% 2% 2% 2.5%;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    background-color: rgba(171, 171, 171, 0.5019607843);
+    border-radius: 15px;
+    width: 40%;
+    padding: 0.5% 2% 2% 2.5%;
+  }
+}
+
+/*# sourceMappingURL=card.css.map */

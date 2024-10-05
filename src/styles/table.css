@@ -1,7 +1,7 @@
 .wrapper__table {
   background-color: rgba(171, 171, 171, 0.5019607843);
   border-radius: 15px;
-  width: 50vw;
+  width: 53vw;
   padding: 0.5% 2% 2% 2.5%;
 }
 
@@ -11,8 +11,8 @@
   border-radius: 15px;
   padding: 1% 0 0 3%;
   margin-top: 2%;
-  height: 80vh;
-  width: 47vw;
+  height: 83vh;
+  width: 50vw;
   display: flex;
   flex-direction: column;
 }

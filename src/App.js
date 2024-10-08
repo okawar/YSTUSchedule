@@ -6,24 +6,21 @@ import MainTable from "./components/MainTable";
 import { useState } from "react";
 
 function App() {
-    const [selectedTeachers, setSelectedTeachers] = useState([]);
-    const [selectedGroups, setSelectedGroups] = useState([]);// Массив выбранных преподавателей
-    const [weekData, setWeekData] = useState([
-        { teacher: "Крамная Е.С.", week: "Пн", time: "08:30-10:00", business: true, auditory: "101", group: "ЦИС-38" },
-        { teacher: "Шулёва Ю.Н.", week: "Вт", time: "10:10-11:40", business: false, auditory: "102",group: "ЦИСБ-34" },
-        { teacher: "Крамная Е.С.", week: "Ср", time: "13:30-15:00", business: true, auditory: "101", group: "ЦИС-38" }
-    ]); // Пример данных
-    const [page, setPage] = useState(0);
+    const [data, setData] = useState([
+        { teacher: "Крамная Е.С.", week: "2-3", time: "08:30-10:00", business: true, auditory: "101", group: "ЦИС-38", day: "Пн" },
+        { teacher: "Шулёва Ю.Н.", week: "1-4", time: "10:10-11:40", business: false, auditory: "102", group: "ЦИСБ-34", day: "Вт" },
+        { teacher: "Крамная Е.С.", week: "13-17", time: "13:30-15:00", business: true, auditory: "101", group: "ЦИС-38", day: "Чт" }
+    ]);
     
-    console.log(page)
+    const [page, setPage] = useState(0);
+    const [selectedTeacher, setSelectedTeacher] = useState(null);
+
     return (
         <div className="App">
             <div className="container">
                 <div className="main">
-                    
-                    
-                    <MainList selectedTeachers={selectedTeachers} setSelectedTeachers={setSelectedTeachers} selectedGroups={selectedGroups} setSelectedGroups={setSelectedGroups} page={page}/>
-                    <MainTable selectedTeachers={selectedTeachers} weekData={weekData} />
+                    <MainList data={data} setData={setData} page={page} setSelectedTeacher={setSelectedTeacher} />
+                    <MainTable data={data} selectedTeacher={selectedTeacher} />
                 </div>
                 <div className="main__btns">
                     <button
@@ -36,7 +33,6 @@ function App() {
                             setPage(page + 1);
                         }}
                     >+</button>
-                    
                 </div>
             </div>
         </div>

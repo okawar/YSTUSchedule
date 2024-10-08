@@ -1,13 +1,29 @@
-.wrapper__table{
-  background-color: #ababab80;
+$primary-color: #ababab80;
+$secondary-color: #fff;
+$border-color: #ddd;
+$input-border-color: #000;
+$button-free-color: #4caf50;
+$button-busy-color: #f44336;
+$cell-busy-color: red;
+$cell-free-color: green;
+$header-background-color: #f3f3f3;
+$cell-border-color: #ccc;
+
+.wrapper__table {
+  background-color: $primary-color;
   border-radius: 15px;
   width: 53vw;
   padding: 0.5% 2% 2% 2.5%;
+
+  @media (max-width: 768px) {
+    width: 90vw;
+    padding: 2%;
+  }
 }
 
 .table {
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: $secondary-color;
+  border: 1px solid $border-color;
   border-radius: 15px;
   padding: 1% 0 0 3%;
   margin-top: 2%;
@@ -15,6 +31,11 @@
   width: 50vw;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    width: 85vw;
+    padding: 2%;
+  }
 }
 
 .header-grid {
@@ -25,6 +46,12 @@
   column-gap: 25%;
   padding: 15px;
   border-radius: 10px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 10%;
+    column-gap: 15%;
+  }
 }
 
 /* 1st Row */
@@ -33,6 +60,9 @@
   grid-row: 1 / 2;    /* 1st row */
   width: 10vw;
 
+  @media (max-width: 768px) {
+    width: 20vw;
+  }
 }
 
 .prof-name {
@@ -42,6 +72,11 @@
   font-size: 1.2rem;
   align-self: center;
   width: 110px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    width: auto;
+  }
 }
 
 .department {
@@ -51,6 +86,10 @@
   font-weight: 600;
   font-size: 1.1rem;
   align-self: center;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 }
 
 /* 2nd Row */
@@ -71,10 +110,14 @@
   display: flex;
   gap: 5px;
   justify-content: center;
-  border: 1px solid #000;
+  border: 1px solid $input-border-color;
   border-radius: 15px;
   overflow: hidden;
   width: 130px;
+
+  @media (max-width: 768px) {
+    width: auto;
+  }
 }
 
 /* Common Input Styles */
@@ -91,7 +134,7 @@
 
 .input-field {
   padding: 5px 10px;
-  border: 2px solid #000;
+  border: 2px solid $input-border-color;
   border-radius: 15px;
   width: 100%;
 }
@@ -105,18 +148,16 @@
 }
 
 .btn.free {
-  background-color: #4caf50; /* Green color */
+  background-color: $button-free-color; /* Green color */
   color: white;
 }
 
 .btn.busy {
-  background-color: #f44336; /* Red color */
+  background-color: $button-busy-color; /* Red color */
   color: white;
 }
 
-
-// Main shedule
-
+// Main schedule
 
 .schedule-container {
   margin: 5% 0 0 0;
@@ -126,44 +167,45 @@
   gap: 5px;
   width: 95%;
   padding: 10px;
-  background-color: #f3f3f3;
+  background-color: $header-background-color;
   border-radius: 10px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 100px repeat(7, 1fr);
+    grid-auto-rows: 40px;
+  }
 }
 
 .header {
-  background-color: #f3f3f3;
+  background-color: $header-background-color;
   text-align: center;
   font-weight: bold;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid $cell-border-color;
 }
 
 .time-cell {
   text-align: center;
   padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: $secondary-color;
+  border: 1px solid $cell-border-color;
   font-weight: bold;
 }
 
 /* Styles for green and red cells */
 
 .busy-cell {
-  background-color: red;
+  background-color: $cell-busy-color;
   color: white;
 }
 
 .free-cell {
-  background-color: green;
+  background-color: $cell-free-color;
   color: white;
 }
 
-.time-cell {
-  font-weight: bold;
-}
-
 .cell {
-  border: 1px solid #ccc; /* Border for empty cells */
+  border: 1px solid $cell-border-color; /* Border for empty cells */
   display: flex;
   justify-content: center;
   align-items: center;

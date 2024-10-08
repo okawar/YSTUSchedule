@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const MainTable = ({ selectedTeachers, weekData }) => {
+const MainTable = ({ data, selectedTeacher }) => {
     const [classroom, setClassroom] = useState('');
-    const [filter, setFilter] = useState(null); // Новое состояние для фильтра: 'free', 'busy', или null для отображения всех
-    
+    const [week, setWeek] = useState('');
+    const [filter, setFilter] = useState(null);
+    const [filteredWeekData, setFilteredWeekData] = useState([]);
+
     const timeSlots = [
         "08:30-10:00",
         "10:10-11:40",
@@ -15,37 +17,58 @@ const MainTable = ({ selectedTeachers, weekData }) => {
         "20:10-21:40",
         "21:50-23:20",
     ];
-    
+
     const daysOfWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-    
-    const filteredWeekData = weekData.filter(
-        (entry) =>
-            selectedTeachers.includes(entry.teacher) &&
-            entry.auditory.includes(classroom)
-    );
-    
+
+    const isWeekInRange = (weekRange, inputWeek) => {
+        const [start, end] = weekRange.split('-').map(Number);
+        const inputWeekNum = parseInt(inputWeek, 10);
+        return inputWeekNum >= start && inputWeekNum <= end;
+    };
+
+
+    useEffect(() => {
+        const updatedData = data.filter((entry) => {
+            const weekMatch = week ? isWeekInRange(entry.week, week) : true; 
+            const classroomMatch = classroom ? entry.auditory.includes(classroom) : true; 
+            const teacherMatch = selectedTeacher ? entry.teacher === selectedTeacher : true; 
+            return weekMatch && classroomMatch && teacherMatch;
+        });
+        setFilteredWeekData(updatedData);
+    }, [week, classroom, selectedTeacher, data]);
+
     const isBusyCell = (day, time) => {
+ 
         return filteredWeekData.some(
-            (entry) => entry.week.includes(day) && entry.time === time
+            (entry) => entry.time === time && entry.day === day 
         );
     };
-    
+
     const getCellClass = (isBusy) => {
-        if (filter === "free" && isBusy) return "hidden"; // Скрывать занятые при фильтре на свободные
-        if (filter === "busy" && !isBusy) return "hidden"; // Скрывать свободные при фильтре на занятые
-        return isBusy ? "busy-cell" : "free-cell"; // Показывать по умолчанию
+        if (filter === "free" && isBusy) return "hidden"; 
+        if (filter === "busy" && !isBusy) return "hidden";
+        return isBusy ? "busy-cell" : "free-cell"; 
     };
-    
+
+    const isFilterReady = week.trim() !== '' && classroom.trim() !== '';
+
     return (
         <div>
             <div className="wrapper__table">
                 <div className="table">
                     <div className="header-grid">
                         <div className="input-group" id="input1">
-                            <label htmlFor="week">Нед.:</label>
-                            <input type="text" id="week" className="input-field" placeholder="Search week" />
+                            <label htmlFor="week">Неделя:</label>
+                            <input
+                                type="text"
+                                id="week"
+                                className="input-field"
+                                placeholder="Введите неделю (формат: 1-2, 3-7)"
+                                value={week}
+                                onChange={(e) => setWeek(e.target.value)}
+                            />
                         </div>
-                        <div className="prof-name">{selectedTeachers.join(", ")}</div>
+                        <div className="prof-name">{selectedTeacher}</div>
                         <div className="department">Каф: Ф</div>
                         <div className="input-group" id="input2">
                             <label htmlFor="auditory">Аудитория:</label>
@@ -53,7 +76,7 @@ const MainTable = ({ selectedTeachers, weekData }) => {
                                 type="text"
                                 id="auditory"
                                 className="input-field"
-                                placeholder="Search classroom"
+                                placeholder="Введите аудиторию"
                                 value={classroom}
                                 onChange={(e) => setClassroom(e.target.value)}
                             />
@@ -75,39 +98,40 @@ const MainTable = ({ selectedTeachers, weekData }) => {
                             >
                                 зан
                             </button>
-                            <button className="btn all" onClick={() => setFilter(null)}>
-                                все
-                            </button>
                         </div>
                     </div>
-                    
-                    <div className="table__body">
-                        <div className="schedule-container">
-                            <div className="header cell">Часы</div>
-                            {daysOfWeek.map((day, index) => (
-                                <div key={index} className="header cell">{day}</div>
-                            ))}
-                            
-                            {timeSlots.map((time, index) => (
-                                <React.Fragment key={index}>
-                                    <div className="time-cell cell">{time}</div>
-                                    {daysOfWeek.map((day, dayIndex) => {
-                                        const isBusy = isBusyCell(day, time);
-                                        const cellClass = getCellClass(isBusy); // Получить CSS-класс ячейки на основе фильтра
-                                        
-                                        return (
-                                            <div
-                                                key={dayIndex}
-                                                className={`cell ${cellClass}`} // Применить CSS-класс
-                                            >
-                                                {isBusy ? "Занято" : "Свободно"}
-                                            </div>
-                                        );
-                                    })}
-                                </React.Fragment>
-                            ))}
+
+                    {!isFilterReady ? (
+                        <div className="notification">Пожалуйста, введите значения для недели и аудитории.</div>
+                    ) : (
+                        <div className="table__body">
+                            <div className="schedule-container">
+                                <div className="header cell">Часы</div>
+                                {daysOfWeek.map((day, index) => (
+                                    <div key={index} className="header cell">{day}</div>
+                                ))}
+
+                                {timeSlots.map((time, index) => (
+                                    <React.Fragment key={index}>
+                                        <div className="time-cell cell">{time}</div>
+                                        {daysOfWeek.map((day, dayIndex) => {
+                                            const isBusy = isBusyCell(day, time);
+                                            const cellClass = getCellClass(isBusy);
+
+                                            return (
+                                                <div
+                                                    key={dayIndex}
+                                                    className={`cell ${cellClass}`}
+                                                >
+                                                    {isBusy ? "Занято" : "Свободно"}
+                                                </div>
+                                            );
+                                        })}
+                                    </React.Fragment>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

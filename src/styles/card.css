@@ -11,7 +11,7 @@
   border: 1px solid #ddd;
   border-radius: 15px;
   padding: 1% 0 0 3%;
-  margin-top: 6%;
+  margin-top: 4%;
   height: 40vh;
   width: 100%;
 }
@@ -37,11 +37,6 @@
 .card__body > div > p {
   margin-left: 20px;
 }
-.card__body > div:last-child > p {
-  padding-right: 25%;
-  padding-bottom: 4%;
-  border-bottom: 3px solid #ababab;
-}
 .card__body > div {
   font-size: 1.2em;
   margin-top: 5%;
@@ -63,4 +58,6 @@
     width: 40%;
     padding: 0.5% 2% 2% 2.5%;
   }
-}/*# sourceMappingURL=card.css.map */
+}
+
+/*# sourceMappingURL=card.css.map */

@@ -1,7 +1,7 @@
 .wrapper__table {
   background-color: rgba(171, 171, 171, 0.5019607843);
   border-radius: 15px;
-  width: 53vw;
+  width: 58vw;
   padding: 0.5% 2% 2% 2.5%;
 }
 @media (max-width: 768px) {
@@ -17,8 +17,8 @@
   border-radius: 15px;
   padding: 1% 0 0 3%;
   margin-top: 2%;
-  height: 83vh;
-  width: 50vw;
+  height: fit-content;
+  width: 55vw;
   display: flex;
   flex-direction: column;
 }
@@ -34,8 +34,7 @@
   grid-template-columns: repeat(9, 1fr); /* 9 equal columns */
   grid-template-rows: repeat(3, auto); /* 3 rows */
   row-gap: 15%;
-  -moz-column-gap: 25%;
-       column-gap: 25%;
+  column-gap: 25%;
   padding: 15px;
   border-radius: 10px;
 }
@@ -43,8 +42,7 @@
   .header-grid {
     grid-template-columns: repeat(3, 1fr);
     row-gap: 10%;
-    -moz-column-gap: 15%;
-         column-gap: 15%;
+    column-gap: 15%;
   }
 }
 
@@ -123,7 +121,6 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  width: -moz-fit-content;
   width: fit-content;
 }
 
@@ -157,10 +154,10 @@
 }
 
 .schedule-container {
-  margin: 5% 0 0 0;
+  margin: 5% 0 3% 0;
   display: grid;
-  grid-template-columns: 150px repeat(7, 1fr); /* 1st column fixed for time, others flexible */
-  grid-auto-rows: 50px; /* Each row will be 50px tall */
+  grid-template-columns: 150px repeat(7, 1fr);
+  grid-auto-rows: 50px;
   gap: 5px;
   width: 95%;
   padding: 10px;
@@ -206,4 +203,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}/*# sourceMappingURL=table.css.map */
+}
+
+/*# sourceMappingURL=table.css.map */

@@ -3,14 +3,17 @@ import React, { useState } from 'react';
 const MainList = ({ data, setSelectedTeacher, setSelectedGroup, setSelectedAuditory, setWindowChange }) => {
     const [windowChangeLocal, setWindowChangeLocal] = useState(0);
     
+    // Для преподавателей
     const [selectedTeacherLocal, setSelectedTeacherLocal] = useState(null);
     const teachers = [...new Set(data.map(item => item.teacher))];
     
+    // Для групп
     const [selectedGroupLocal, setSelectedGroupLocal] = useState(null);
     const groups = [...new Set(data.map(item => item.group))];
     
+    // Для аудиторий
     const [selectedAuditoryLocal, setSelectedAuditoryLocal] = useState(null);
-    const [selectedAuditoryType, setSelectedAuditoryType] = useState(null); // Новое состояние для типа аудитории
+    const [selectedAuditoryType, setSelectedAuditoryType] = useState(null);
     const auditories = [...new Set(data.map(item => item.auditory))];
     
     const handleCheckboxChangeTeachers = (teacher) => {
@@ -46,62 +49,10 @@ const MainList = ({ data, setSelectedTeacher, setSelectedGroup, setSelectedAudit
                 <div className="wrapper__card">
                     <div className="card">
                         <div className="card__name">Выберите категорию</div>
-                        <div
-                            
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                            }}
-                            
-                            className="card__body">
-                            <button
-                                style={{
-                                
-                                    background: "transparent",
-                                    border: "transparent",
-                                    borderBottom: "2px solid #000",
-                                    marginTop: "30px",
-                                    paddingBottom: "10px",
-                                    fontWeight: "600",
-                                    fontSize: "24px",
-                                    width: "70%",
-                                    alignSelf: "center"
-                                
-                                }}
-                                
-                                onClick={() => { setWindowChangeLocal(1); setWindowChange(1); }}>Преподаватели</button>
-                            <button
-                                style={{
-                                
-                                    background: "transparent",
-                                    border: "transparent",
-                                    borderBottom: "2px solid #000",
-                                    marginTop: "30px",
-                                    paddingBottom: "10px",
-                                    fontWeight: "600",
-                                    fontSize: "24px",
-                                    width: "70%",
-                                    alignSelf: "center"
-                                
-                                }}
-                                
-                                onClick={() => { setWindowChangeLocal(2); setWindowChange(2); }}>Группы</button>
-                            <button
-                                style={{
-                                
-                                    background: "transparent",
-                                    border: "transparent",
-                                    borderBottom: "2px solid #000",
-                                    marginTop: "30px",
-                                    paddingBottom: "10px",
-                                    fontWeight: "600",
-                                    fontSize: "24px",
-                                    width: "70%",
-                                    alignSelf: "center"
-                                
-                                }}
-                                
-                                onClick={() => { setWindowChangeLocal(3); setWindowChange(3); }}>Аудитории</button>
+                        <div style={{ display: "flex", flexDirection: "column" }} className="card__body">
+                            <button onClick={() => { setWindowChangeLocal(1); setWindowChange(1); }}>Преподаватели</button>
+                            <button onClick={() => { setWindowChangeLocal(2); setWindowChange(2); }}>Группы</button>
+                            <button onClick={() => { setWindowChangeLocal(3); setWindowChange(3); }}>Аудитории</button>
                         </div>
                     </div>
                 </div>
@@ -113,30 +64,20 @@ const MainList = ({ data, setSelectedTeacher, setSelectedGroup, setSelectedAudit
         return (
             <div>
                 <div className="wrapper__card">
-                    <div className="card" style={{ overflow: "hidden" }}>
-                        <button
-                            style={{ background: "transparent", borderColor: "transparent", cursor: "pointer", marginTop: "20px" }}
-                            onClick={() => { setWindowChangeLocal(0); setWindowChange(0); }}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" />
-                            </svg>
-                        </button>
+                    <div className="card">
+                        <button onClick={() => { setWindowChangeLocal(0); setWindowChange(0); }}>Назад</button>
                         <h2 className="card__name">Преподаватели</h2>
                         <div className="card__body">
-                            <input type="text" className="card__search" placeholder="Найти преподавателя" />
-                            <div style={{ overflow: "scroll", display: "flex", flexDirection: "column", height: "100px", fontSize: "24px" }}>
-                                {teachers.map((teacher) => (
-                                    <div key={teacher} style={{ display: "flex", marginTop: "15px" }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedTeacherLocal === teacher}
-                                            onChange={() => handleCheckboxChangeTeachers(teacher)}
-                                        />
-                                        <p style={{ marginLeft: "10px" }}>{teacher}</p>
-                                    </div>
-                                ))}
-                            </div>
+                            {teachers.map((teacher) => (
+                                <div key={teacher} style={{ display: "flex", marginTop: "15px" }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedTeacherLocal === teacher}
+                                        onChange={() => handleCheckboxChangeTeachers(teacher)}
+                                    />
+                                    <p style={{ marginLeft: "10px" }}>{teacher}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -149,26 +90,17 @@ const MainList = ({ data, setSelectedTeacher, setSelectedGroup, setSelectedAudit
             <div>
                 <div className="wrapper__card">
                     <div className="card">
-                        <button
-                            style={{ background: "transparent", borderColor: "transparent", cursor: "pointer", marginTop: "20px" }}
-                            onClick={() => { setWindowChangeLocal(0); setWindowChange(0); }}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" />
-                            </svg>
-                        </button>
-                        
+                        <button onClick={() => { setWindowChangeLocal(0); setWindowChange(0); }}>Назад</button>
                         <h2 className="card__name">Группы</h2>
                         <div className="card__body">
-                            <input type="text" className="card__search" placeholder="Найти группу" />
                             {groups.map((group) => (
-                                <div key={group}>
+                                <div key={group} style={{ display: "flex", marginTop: "15px" }}>
                                     <input
                                         type="checkbox"
                                         checked={selectedGroupLocal === group}
                                         onChange={() => handleCheckboxChangeGroups(group)}
                                     />
-                                    <p>{group}</p>
+                                    <p style={{ marginLeft: "10px" }}>{group}</p>
                                 </div>
                             ))}
                         </div>
@@ -183,63 +115,22 @@ const MainList = ({ data, setSelectedTeacher, setSelectedGroup, setSelectedAudit
             <div>
                 <div className="wrapper__card">
                     <div className="card">
-                        <button
-                            style={{ background: "transparent", borderColor: "transparent", cursor: "pointer", marginTop: "20px" }}
-                            onClick={() => { setWindowChangeLocal(0); setWindowChange(0); }}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" />
-                            </svg>
-                        </button>
+                        <button onClick={() => { setWindowChangeLocal(0); setWindowChange(0); }}>Назад</button>
                         <h2 className="card__name">Аудитории</h2>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-around",
-                                marginBottom: "15px",
-
-                            }}
-                            
-                        >
-                            <button
-                                style={{
-                                    borderColor: "transparent",
-                                    background: "transparent",
-                                    cursor: "pointer",
-                                    fontSize: "17px"
-                                }}
-                                
-                                
-                                onClick={() => handleAuditoryTypeChange("c/c")}>к/к</button>
-                            <button
-                                style={{
-                                    borderColor: "transparent",
-                                    background: "transparent",
-                                    cursor: "pointer",
-                                    fontSize: "17px"
-                                }}
-                                
-                                onClick={() => handleAuditoryTypeChange("m/m")}>м/м</button>
-                            <button
-                                style={{
-                                    borderColor: "transparent",
-                                    background: "transparent",
-                                    cursor: "pointer",
-                                    fontSize: "17px"
-                                }}
-                                
-                                onClick={() => handleAuditoryTypeChange("potok")}>поток</button>
+                        <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "15px" }}>
+                            <button onClick={() => handleAuditoryTypeChange("c/c")}>к/к</button>
+                            <button onClick={() => handleAuditoryTypeChange("m/m")}>м/м</button>
+                            <button onClick={() => handleAuditoryTypeChange("potok")}>поток</button>
                         </div>
                         <div className="card__body">
-                            <input type="text" className="card__search" placeholder="Найти аудиторию" />
                             {filteredAuditories.map((auditory) => (
-                                <div key={auditory}>
+                                <div key={auditory} style={{ display: "flex", marginTop: "15px" }}>
                                     <input
                                         type="checkbox"
                                         checked={selectedAuditoryLocal === auditory}
                                         onChange={() => handleCheckboxChangeAuditories(auditory)}
                                     />
-                                    <p>{auditory}</p>
+                                    <p style={{ marginLeft: "10px" }}>{auditory}</p>
                                 </div>
                             ))}
                         </div>

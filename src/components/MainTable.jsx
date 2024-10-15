@@ -10,10 +10,17 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
     const daysOfWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
     
     const isWeekInRange = (weekRange, inputWeek) => {
-        const [start, end] = weekRange.split('-').map(Number);
+        const weeksInRange = weekRange.split('-').map(Number);
         const inputWeekNum = parseInt(inputWeek, 10);
-        return inputWeekNum >= start && inputWeekNum <= end;
+        
+        if (weeksInRange.length === 1) {
+            return inputWeekNum === weeksInRange[0];
+        } else {
+            const [start, end] = weeksInRange;
+            return inputWeekNum >= start && inputWeekNum <= end;
+        }
     };
+    
     
     const findFreeWeeks = (occupiedWeeks, currentWeekRange) => {
         const [startWeek, endWeek] = currentWeekRange.split('-').map(Number);
@@ -41,18 +48,11 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         let occupiedWeeksByOtherTeacher = [];
         let isConflict = false;
         
-        // Проверяем корректность входных данных
-        console.log("Day:", day, "Time:", time, "Classroom:", classroom);
-        console.log("Selected Teacher:", selectedTeacher, "Week:", week);
-        
         if (windowChange === 1 && selectedTeacher) {
-            
             data.forEach(entry => {
-                // Проверяем, совпадают ли день, время и аудитория
-                console.log("Processing entry:", entry);
                 if (entry.time === time && entry.day === day && entry.auditory.includes(classroom)) {
                     let weeksInRange = [];
-                    // Разбиваем диапазон недель и обрабатываем каждую
+                    
                     entry.week.split(',').forEach(weekRange => {
                         weekRange = weekRange.trim();
                         
@@ -66,30 +66,16 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                         }
                     });
                     
-                    console.log("Weeks in range:", weeksInRange);
-                    
-                    // Проверка для выбранного преподавателя
-                    if (entry.teacher === selectedTeacher && weeksInRange.some(w => isWeekInRange(w, week))) {
-                        occupiedWeeksBySelectedTeacher.push(...weeksInRange);
-                        console.log("Added to selected teacher weeks:", occupiedWeeksBySelectedTeacher);
-                    }
-                    // Проверка для других преподавателей
-                    else if (entry.teacher !== selectedTeacher) {
-                        occupiedWeeksByOtherTeacher.push(...weeksInRange);
-                        console.log("Added to other teacher weeks:", occupiedWeeksByOtherTeacher);
+                    if (weeksInRange.some(w => isWeekInRange(w, week))) {
+                        if (entry.teacher === selectedTeacher) {
+                            occupiedWeeksBySelectedTeacher.push(...weeksInRange);
+                        } else {
+                            occupiedWeeksByOtherTeacher.push(...weeksInRange);
+                            isConflict = true;
+                        }
                     }
                 }
             });
-            
-            // Проверяем пересечение недель
-            console.log("Occupied Weeks by Selected Teacher:", occupiedWeeksBySelectedTeacher);
-            console.log("Occupied Weeks by Other Teacher:", occupiedWeeksByOtherTeacher);
-            
-            if (occupiedWeeksBySelectedTeacher.some(week => occupiedWeeksByOtherTeacher.includes(week))) {
-                isConflict = true;
-            }
-            
-            console.log("Conflict Detected?", isConflict);
         }
         
         return {
@@ -98,24 +84,45 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
             isConflict,
         };
     };
-
+    
     
     const getCellContent = (occupiedWeeksBySelectedTeacher, occupiedWeeksByOtherTeacher, currentWeekRange) => {
         let freeWeeks = findFreeWeeks(occupiedWeeksByOtherTeacher, currentWeekRange);
         
         if (occupiedWeeksBySelectedTeacher.length > 0) {
-            return `Занято (${occupiedWeeksBySelectedTeacher.join(', ')})`;
+            return `Занято (${formatWeeks(occupiedWeeksBySelectedTeacher)})`;
         } else if (freeWeeks.length > 0) {
-            return `Свободно (${freeWeeks.join(', ')})`;
+            return `Свободно (${formatWeeks(freeWeeks)})`;
         }
         return '';
     };
+    
+    const formatWeeks = (weeks) => {
+        let formattedWeeks = [];
+        let currentRange = [weeks[0]];
+        
+        for (let i = 1; i < weeks.length; i++) {
+            if (weeks[i] === weeks[i - 1] + 1) {
+                currentRange.push(weeks[i]);
+            } else {
+                formattedWeeks.push(currentRange.length > 1 ? `${currentRange[0]}-${currentRange[currentRange.length - 1]}` : currentRange[0]);
+                currentRange = [weeks[i]];
+            }
+        }
+        
+        formattedWeeks.push(currentRange.length > 1 ? `${currentRange[0]}-${currentRange[currentRange.length - 1]}` : currentRange[0]);
+        
+        return formattedWeeks.join(', ');
+    };
+
+    
     
     const getCellClass = (isConflict, occupiedWeeksBySelectedTeacher) => {
         if (isConflict) return "conflict";
         if (occupiedWeeksBySelectedTeacher.length > 0) return "busy";
         return "free";
     };
+
     
     return (
         <div className="wrapper__table">

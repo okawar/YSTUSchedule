@@ -15,6 +15,19 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         return inputWeekNum >= start && inputWeekNum <= end;
     };
     
+    const findFreeWeeks = (occupiedWeeks, currentWeekRange) => {
+        const [startWeek, endWeek] = currentWeekRange.split('-').map(Number);
+        let freeWeeks = [];
+        
+        for (let week = startWeek; week <= endWeek; week++) {
+            if (!occupiedWeeks.includes(week.toString())) {
+                freeWeeks.push(week);
+            }
+        }
+        
+        return freeWeeks;
+    };
+    
     useEffect(() => {
         if (week && classroom) {
             setIsFilterReady(true);
@@ -24,63 +37,91 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
     }, [week, classroom]);
     
     const findCellState = (day, time) => {
-        let isBusyBySelectedTeacher = false;
-        let isBusyBySelectedGroup = false;
-        let isBusyBySelectedAuditory = false;
+        let occupiedWeeksBySelectedTeacher = [];
+        let occupiedWeeksByOtherTeacher = [];
+        let isConflict = false;
+        
+        // Проверяем корректность входных данных
+        console.log("Day:", day, "Time:", time, "Classroom:", classroom);
+        console.log("Selected Teacher:", selectedTeacher, "Week:", week);
         
         if (windowChange === 1 && selectedTeacher) {
-            // Проверка занятости по преподавателю
-            isBusyBySelectedTeacher = data.some(
-                (entry) =>
-                    entry.time === time &&
-                    entry.day === day &&
-                    entry.teacher === selectedTeacher &&
-                    isWeekInRange(entry.week, week) &&
-                    entry.auditory.includes(classroom)
-            );
-        }
-        
-        if (windowChange === 2 && selectedGroup) {
-            // Проверка занятости по группе
-            isBusyBySelectedGroup = data.some(
-                (entry) =>
-                    entry.time === time &&
-                    entry.day === day &&
-                    entry.group === selectedGroup &&
-                    isWeekInRange(entry.week, week)
-            );
-        }
-        
-        if (windowChange === 3 && selectedAuditory) {
-            // Проверка занятости по аудитории
-            isBusyBySelectedAuditory = data.some(
-                (entry) =>
-                    entry.time === time &&
-                    entry.day === day &&
-                    entry.auditory.includes(selectedAuditory) &&
-                    isWeekInRange(entry.week, week)
-            );
+            
+            data.forEach(entry => {
+                // Проверяем, совпадают ли день, время и аудитория
+                console.log("Processing entry:", entry);
+                if (entry.time === time && entry.day === day && entry.auditory.includes(classroom)) {
+                    let weeksInRange = [];
+                    // Разбиваем диапазон недель и обрабатываем каждую
+                    entry.week.split(',').forEach(weekRange => {
+                        weekRange = weekRange.trim();
+                        
+                        if (weekRange.includes('-')) {
+                            const [startWeek, endWeek] = weekRange.split('-').map(Number);
+                            for (let i = startWeek; i <= endWeek; i++) {
+                                weeksInRange.push(i.toString());
+                            }
+                        } else {
+                            weeksInRange.push(weekRange);
+                        }
+                    });
+                    
+                    console.log("Weeks in range:", weeksInRange);
+                    
+                    // Проверка для выбранного преподавателя
+                    if (entry.teacher === selectedTeacher && weeksInRange.some(w => isWeekInRange(w, week))) {
+                        occupiedWeeksBySelectedTeacher.push(...weeksInRange);
+                        console.log("Added to selected teacher weeks:", occupiedWeeksBySelectedTeacher);
+                    }
+                    // Проверка для других преподавателей
+                    else if (entry.teacher !== selectedTeacher) {
+                        occupiedWeeksByOtherTeacher.push(...weeksInRange);
+                        console.log("Added to other teacher weeks:", occupiedWeeksByOtherTeacher);
+                    }
+                }
+            });
+            
+            // Проверяем пересечение недель
+            console.log("Occupied Weeks by Selected Teacher:", occupiedWeeksBySelectedTeacher);
+            console.log("Occupied Weeks by Other Teacher:", occupiedWeeksByOtherTeacher);
+            
+            if (occupiedWeeksBySelectedTeacher.some(week => occupiedWeeksByOtherTeacher.includes(week))) {
+                isConflict = true;
+            }
+            
+            console.log("Conflict Detected?", isConflict);
         }
         
         return {
-            isBusyBySelectedTeacher,
-            isBusyBySelectedGroup,
-            isBusyBySelectedAuditory,
+            occupiedWeeksBySelectedTeacher,
+            occupiedWeeksByOtherTeacher,
+            isConflict,
         };
     };
+
     
-    const getCellClass = (isBusyBySelectedTeacher, isBusyBySelectedGroup, isBusyBySelectedAuditory) => {
-        if (windowChange === 1 && isBusyBySelectedTeacher) return "busy"; // Занято преподавателем
-        if (windowChange === 2 && isBusyBySelectedGroup) return "busy"; // Занято группой
-        if (windowChange === 3 && isBusyBySelectedAuditory) return "busy"; // Занято аудиторией
-        return "free"; // Свободно
+    const getCellContent = (occupiedWeeksBySelectedTeacher, occupiedWeeksByOtherTeacher, currentWeekRange) => {
+        let freeWeeks = findFreeWeeks(occupiedWeeksByOtherTeacher, currentWeekRange);
+        
+        if (occupiedWeeksBySelectedTeacher.length > 0) {
+            return `Занято (${occupiedWeeksBySelectedTeacher.join(', ')})`;
+        } else if (freeWeeks.length > 0) {
+            return `Свободно (${freeWeeks.join(', ')})`;
+        }
+        return '';
+    };
+    
+    const getCellClass = (isConflict, occupiedWeeksBySelectedTeacher) => {
+        if (isConflict) return "conflict";
+        if (occupiedWeeksBySelectedTeacher.length > 0) return "busy";
+        return "free";
     };
     
     return (
         <div className="wrapper__table">
             <div className="table">
                 <div className="header-grid">
-                    {/* Input fields for filtering */}
+
                     <div className="input-group" id="input1">
                         <label htmlFor="week">Неделя:</label>
                         <input
@@ -138,17 +179,16 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                                 <React.Fragment key={index}>
                                     <div className="time-cell cell">{time}</div>
                                     {daysOfWeek.map((day, dayIndex) => {
-                                        const { isBusyBySelectedTeacher, isBusyBySelectedGroup, isBusyBySelectedAuditory } = findCellState(day, time);
-                                        const cellClass = getCellClass(isBusyBySelectedTeacher, isBusyBySelectedGroup, isBusyBySelectedAuditory);
+                                        const { occupiedWeeksBySelectedTeacher, occupiedWeeksByOtherTeacher, isConflict } = findCellState(day, time);
+                                        const cellClass = getCellClass(isConflict, occupiedWeeksBySelectedTeacher);
+                                        const cellContent = getCellContent(occupiedWeeksBySelectedTeacher, occupiedWeeksByOtherTeacher, week);
                                         
                                         return (
                                             <div
                                                 key={dayIndex}
                                                 className={`cell ${cellClass}`}
                                             >
-                                                {windowChange === 1 && isBusyBySelectedTeacher ? `Занято (${week})` : ""}
-                                                {windowChange === 2 && isBusyBySelectedGroup ? `Занято (${week})` : ""}
-                                                {windowChange === 3 && isBusyBySelectedAuditory ? `Занято (${week})` : ""}
+                                                {isConflict ? '' : cellContent}
                                             </div>
                                         );
                                     })}

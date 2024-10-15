@@ -7,6 +7,7 @@ $button-free-color: #4caf50;
 $button-busy-color: #f44336;
 $cell-busy-color: red;
 $cell-free-color: green;
+$cell-conflict-color: #fff;
 $header-background-color: #f3f3f3;
 $cell-border-color: #ccc;
 
@@ -202,13 +203,19 @@ $cell-border-color: #ccc;
   justify-content: center;
   align-items: center;
 
-  &.busy-cell {
+  &.busy {
     background-color: $cell-busy-color;
     color: white;
+    text-align: center;
   }
 
-  &.free-cell {
+  &.free {
     background-color: $cell-free-color;
     color: white;
+    text-align: center;
+  }
+
+  &.conflict{
+    background-color: $cell-conflict-color;
   }
 }

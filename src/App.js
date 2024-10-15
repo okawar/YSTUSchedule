@@ -11,9 +11,9 @@ import {useEffect, useState} from "react";
 // !!!!!!!!!!!!! При выборе дня недели подписываются группы и недели, которые есть у препода, и если ячейка свободна, то он может поставить их туда
 function App() {
     const [data, setData] = useState([
-        { teacher: "Крамная Е.С.", pulpit: "Ф", week: "2-3", time: "08:30-10:00", business: true, auditory: "101", auditoryType: "c/c", group: "ЦИС-38", day: "Пн" },
+        { teacher: "Крамная Е.С.", pulpit: "Ф", week: "2-3", time: "08:30-10:00", business: true, auditory: "101", auditoryType: "c/c", group: "ЦИС-38", day: "Вт" },
         { teacher: "Шулёва Ю.Н.", pulpit: "ИС", week: "1-4", time: "10:10-11:40", business: false, auditory: "101", auditoryType: "m/m", group: "ЦИСБ-34", day: "Вт" },
-        { teacher: "Крамная Е.С.", pulpit: "Ф", week: "13-17", time: "13:30-15:00", business: true, auditory: "101", auditoryType: "potok", group: "ЦИС-38", day: "Чт" }
+        { teacher: "Крамная Е.С.", pulpit: "Ф", week: "13-17", time: "13:30-15:00", business: true, auditory: "101", auditoryType: "potok", group: "ЦИС-38", day: "Чт" },
     ]);
 
     
@@ -33,7 +33,6 @@ function App() {
         }
     }, [selectedTeacher, data]);
 
-    console.log(selectedPulpit)
     return (
         <div className="App">
             <div className="container">

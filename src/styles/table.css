@@ -185,13 +185,18 @@
   justify-content: center;
   align-items: center;
 }
-.cell.busy-cell {
+.cell.busy {
   background-color: red;
   color: white;
+  text-align: center;
 }
-.cell.free-cell {
+.cell.free {
   background-color: green;
   color: white;
+  text-align: center;
+}
+.cell.conflict {
+  background-color: #fff;
 }
 
 /*# sourceMappingURL=table.css.map */

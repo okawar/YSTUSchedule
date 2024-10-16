@@ -9,19 +9,26 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
     const timeSlots = ["08:30-10:00", "10:10-11:40", "11:50-13:20", "13:30-15:00", "15:10-16:40", "16:50-18:20", "18:30-20:00", "20:10-21:40", "21:50-23:20"];
     const daysOfWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
     
-    const isWeekInRange = (weekRange, inputWeek) => {
+    // Проверяет, попадает ли неделя в заданный диапазон
+    const isWeekInRange = (weekRange, inputWeekRange) => {
+        const [startInputWeek, endInputWeek] = inputWeekRange.split('-').map(Number);
         const weeksInRange = weekRange.split('-').map(Number);
-        const inputWeekNum = parseInt(inputWeek, 10);
         
+        // Если диапазон одной недели
         if (weeksInRange.length === 1) {
-            return inputWeekNum === weeksInRange[0];
+            return weeksInRange[0] >= startInputWeek && weeksInRange[0] <= endInputWeek;
         } else {
-            const [start, end] = weeksInRange;
-            return inputWeekNum >= start && inputWeekNum <= end;
+            // Если это диапазон недель
+            const [startWeek, endWeek] = weeksInRange;
+            return (
+                (startWeek >= startInputWeek && startWeek <= endInputWeek) ||
+                (endWeek >= startInputWeek && endWeek <= endInputWeek) ||
+                (startInputWeek >= startWeek && endInputWeek <= endWeek)
+            );
         }
     };
     
-    
+    // Поиск свободных недель, которые не заняты другим преподавателем
     const findFreeWeeks = (occupiedWeeks, currentWeekRange) => {
         const [startWeek, endWeek] = currentWeekRange.split('-').map(Number);
         let freeWeeks = [];
@@ -43,6 +50,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         }
     }, [week, classroom]);
     
+    // Поиск состояния ячейки с учетом диапазона недель
     const findCellState = (day, time) => {
         let occupiedWeeksBySelectedTeacher = [];
         let occupiedWeeksByOtherTeacher = [];
@@ -66,6 +74,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                         }
                     });
                     
+                    // Проверяем, что недели попадают в диапазон введенных пользователем
                     if (weeksInRange.some(w => isWeekInRange(w, week))) {
                         if (entry.teacher === selectedTeacher) {
                             occupiedWeeksBySelectedTeacher.push(...weeksInRange);
@@ -85,7 +94,29 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         };
     };
     
+    // Форматирование недель как "занято (начальная неделя - конечная неделя)"
+    const formatWeeks = (weeks) => {
+        if (weeks.length === 0) return '';
+        let formattedWeeks = [];
+        let currentRange = [parseInt(weeks[0], 10)];
+        
+        for (let i = 1; i < weeks.length; i++) {
+            const currentWeek = parseInt(weeks[i], 10);
+            if (currentWeek === currentRange[currentRange.length - 1] + 1) {
+                currentRange.push(currentWeek);
+            } else {
+                formattedWeeks.push(`${currentRange[0]}-${currentRange[currentRange.length - 1]}`);
+                currentRange = [currentWeek];
+            }
+        }
+        
+        // Добавляем последний диапазон
+        formattedWeeks.push(`${currentRange[0]}-${currentRange[currentRange.length - 1]}`);
+        
+        return formattedWeeks.join(', ');
+    };
     
+    // Получение содержимого ячейки
     const getCellContent = (occupiedWeeksBySelectedTeacher, occupiedWeeksByOtherTeacher, currentWeekRange) => {
         let freeWeeks = findFreeWeeks(occupiedWeeksByOtherTeacher, currentWeekRange);
         
@@ -97,45 +128,24 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         return '';
     };
     
-    const formatWeeks = (weeks) => {
-        let formattedWeeks = [];
-        let currentRange = [weeks[0]];
-        
-        for (let i = 1; i < weeks.length; i++) {
-            if (weeks[i] === weeks[i - 1] + 1) {
-                currentRange.push(weeks[i]);
-            } else {
-                formattedWeeks.push(currentRange.length > 1 ? `${currentRange[0]}-${currentRange[currentRange.length - 1]}` : currentRange[0]);
-                currentRange = [weeks[i]];
-            }
-        }
-        
-        formattedWeeks.push(currentRange.length > 1 ? `${currentRange[0]}-${currentRange[currentRange.length - 1]}` : currentRange[0]);
-        
-        return formattedWeeks.join(', ');
-    };
-
-    
-    
+    // Классы для ячейки
     const getCellClass = (isConflict, occupiedWeeksBySelectedTeacher) => {
         if (isConflict) return "conflict";
         if (occupiedWeeksBySelectedTeacher.length > 0) return "busy";
         return "free";
     };
-
     
     return (
         <div className="wrapper__table">
             <div className="table">
                 <div className="header-grid">
-
                     <div className="input-group" id="input1">
                         <label htmlFor="week">Неделя:</label>
                         <input
                             type="text"
                             id="week"
                             className="input-field"
-                            placeholder="Введите неделю (формат: 1-2, 3-7)"
+                            placeholder="Введите неделю (формат: 1-17)"
                             value={week}
                             onChange={(e) => setWeek(e.target.value)}
                         />

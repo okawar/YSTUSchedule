@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, windowChange, selectedPulpit }) => {
+const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, windowChange, selectedPulpit, handleCellClick }) => {
     const [classroom, setClassroom] = useState(selectedAuditory || '');
     const [week, setWeek] = useState('');
     const [filter, setFilter] = useState(null);
@@ -39,26 +39,26 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
     };
     
     useEffect(() => {
-        if (week && classroom) {
+        // Updated logic here
+        if (week && (windowChange !== 3 ? classroom : selectedAuditory)) {
             setIsFilterReady(true);
         } else {
             setIsFilterReady(false);
         }
-    }, [week, classroom]);
+    }, [week, selectedAuditory, classroom, windowChange]);
     
     const findCellState = (day, time) => {
         let occupiedWeeksBySelected = [];
         let occupiedWeeksByOther = [];
         let isConflict = false;
         
+        // Логика для преподавателей
         if (windowChange === 1 && selectedTeacher) {
             data.forEach(entry => {
                 if (entry.time === time && entry.day === day && entry.auditory.includes(classroom)) {
                     let weeksInRange = [];
-                    
                     entry.week.split(',').forEach(weekRange => {
                         weekRange = weekRange.trim();
-                        
                         if (weekRange.includes('-')) {
                             const [startWeek, endWeek] = weekRange.split('-').map(Number);
                             for (let i = startWeek; i <= endWeek; i++) {
@@ -79,42 +79,14 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                     }
                 }
             });
-        } else if (windowChange === 3 && selectedAuditory) {
+        }
+        // Логика для групп
+        else if (windowChange === 2 && selectedGroup) {
             data.forEach(entry => {
-                if (entry.time === time && entry.day === day && entry.group.includes(selectedGroup)) {
+                if (entry.time === time && entry.day === day && entry.auditory.includes(classroom)) {
                     let weeksInRange = [];
-                    
                     entry.week.split(',').forEach(weekRange => {
                         weekRange = weekRange.trim();
-                        
-                        if (weekRange.includes('-')) {
-                            const [startWeek, endWeek] = weekRange.split('-').map(Number);
-                            for (let i = startWeek; i <= endWeek; i++) {
-                                weeksInRange.push(i.toString());
-                            }
-                        } else {
-                            weeksInRange.push(weekRange);
-                        }
-                    });
-                    
-                    if (weeksInRange.some(w => isWeekInRange(w, week))) {
-                        if (entry.auditory === selectedAuditory) {
-                            occupiedWeeksBySelected.push(...weeksInRange);
-                        } else {
-                            occupiedWeeksByOther.push(...weeksInRange);
-                            isConflict = true;
-                        }
-                    }
-                }
-            });
-        } else if (windowChange === 2 && selectedGroup) {
-            data.forEach(entry => {
-                if (entry.time === time && entry.day === day && entry.auditory.includes(selectedAuditory)) {
-                    let weeksInRange = [];
-                    
-                    entry.week.split(',').forEach(weekRange => {
-                        weekRange = weekRange.trim();
-                        
                         if (weekRange.includes('-')) {
                             const [startWeek, endWeek] = weekRange.split('-').map(Number);
                             for (let i = startWeek; i <= endWeek; i++) {
@@ -136,6 +108,34 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                 }
             });
         }
+        // Логика для аудиторий
+        else if (windowChange === 3 && selectedAuditory) {
+            data.forEach(entry => {
+                if (entry.time === time && entry.day === day && entry.auditory.includes(selectedAuditory)) {
+                    let weeksInRange = [];
+                    entry.week.split(',').forEach(weekRange => {
+                        weekRange = weekRange.trim();   
+                        if (weekRange.includes('-')) {
+                            const [startWeek, endWeek] = weekRange.split('-').map(Number);
+                            for (let i = startWeek; i <= endWeek; i++) {
+                                weeksInRange.push(i.toString());
+                            }
+                        } else {
+                            weeksInRange.push(weekRange);
+                        }
+                    });
+                    
+                    if (weeksInRange.some(w => isWeekInRange(w, week))) {
+                        if (entry.auditory === selectedAuditory) {
+                            occupiedWeeksBySelected.push(...weeksInRange);
+                        } else {
+                            occupiedWeeksByOther.push(...weeksInRange);
+                            isConflict = true;
+                        }
+                    }
+                }
+            });
+        }
         
         return {
             occupiedWeeksBySelected,
@@ -143,6 +143,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
             isConflict,
         };
     };
+
     
     const formatWeeks = (weeks) => {
         if (weeks.length === 0) return '';
@@ -200,17 +201,23 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                     {windowChange === 2 && <div className="prof-name">{selectedGroup}</div>}
                     {windowChange === 3 && <div className="prof-name">{selectedAuditory}</div>}
                     <div className="department">Каф: {selectedPulpit}</div>
-                    <div className="input-group" id="input2">
-                        <label htmlFor="auditory">{windowChange === 1 ? 'Аудитория:' : 'Группа:'}</label>
-                        <input
-                            type="text"
-                            id="auditory"
-                            className="input-field"
-                            placeholder={windowChange === 1 ? "Введите аудиторию" : "Введите группу"}
-                            value={classroom}
-                            onChange={(e) => setClassroom(e.target.value)}
-                        />
-                    </div>
+                    
+                    {windowChange !== 3 ?
+                        <div className="input-group" id="input2">
+                            <label htmlFor="auditory">{windowChange === 1 ? 'Аудитория:' : 'Аудитория:'}</label>
+                            <input
+                                type="text"
+                                id="auditory"
+                                className="input-field"
+                                placeholder={windowChange === 1 ? "Введите аудиторию" : "Введите аудиторию"}
+                                value={classroom}
+                                onChange={(e) => setClassroom(e.target.value)}
+                            />
+                        </div>
+                        :
+                        null
+                    }
+                    
                     
                     <div className="buttons">
                         <button
@@ -223,13 +230,16 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                             className={`btn busy ${filter === "busy" ? "active" : ""}`}
                             onClick={() => setFilter("busy")}
                         >
-                            зан
+                        зан
                         </button>
                     </div>
                 </div>
                 
                 {!isFilterReady ? (
-                    <div style={{ marginTop: "20px" }} className="notification">Пожалуйста, введите значения для недели и {windowChange === 1 ? 'аудитории' : 'группы'}.</div>
+                    <div style={{marginTop: "20px"}} className="notification">
+                        Пожалуйста, введите значения для недели
+                        и {windowChange === 1 ? 'аудитории' : windowChange === 2 ? 'группы' : 'аудитории'}.
+                    </div>
                 ) : (
                     <div className="table__body">
                         <div className="schedule-container">
@@ -250,6 +260,8 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                                             <div
                                                 key={dayIndex}
                                                 className={`cell ${cellClass}`}
+                                                onClick={() => handleCellClick(day, time)}
+                                            
                                             >
                                                 {isConflict ? '' : cellContent}
                                             </div>

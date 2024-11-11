@@ -217,5 +217,6 @@ $cell-border-color: #ccc;
 
   &.conflict{
     background-color: $cell-conflict-color;
+    text-align: center;
   }
 }

@@ -85,7 +85,7 @@ const MainList = ({ data, setSelectedTeacher, setSelectedGroup, setSelectedAudit
                                 filteredDataDay.map((item, index) => (
                                     <div key={index} style={{ marginBottom: "10px" }}>
                                         <p>
-                                            ({item.week}) {item.subject} {item.teacher} ({item.group})
+                                            ({item.week}) {item.subject} {item.teacher} ({item.group}) {item.auditory}
                                         </p>
                                     </div>
                                 ))

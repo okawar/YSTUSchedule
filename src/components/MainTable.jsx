@@ -37,15 +37,15 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         
         return freeWeeks;
     };
-    
-    useEffect(() => {
-        // Updated logic here
-        if (week && (windowChange !== 3 ? classroom : selectedAuditory)) {
-            setIsFilterReady(true);
-        } else {
-            setIsFilterReady(false);
-        }
-    }, [week, selectedAuditory, classroom, windowChange]);
+    //
+    // useEffect(() => {
+    //     // Updated logic here
+    //     if (week && (windowChange !== 3 ? classroom : selectedAuditory)) {
+    //         setIsFilterReady(true);
+    //     } else {
+    //         setIsFilterReady(false);
+    //     }
+    // }, [week, selectedAuditory, classroom, windowChange]);
     
     const findCellState = (day, time) => {
         let occupiedWeeksBySelected = [];
@@ -55,7 +55,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         // Логика для преподавателей
         if (windowChange === 1 && selectedTeacher) {
             data.forEach(entry => {
-                if (entry.time === time && entry.day === day && entry.auditory.includes(classroom)) {
+                if (entry.time === time && entry.day === day && (!classroom || entry.auditory.includes(classroom))) {
                     let weeksInRange = [];
                     entry.week.split(',').forEach(weekRange => {
                         weekRange = weekRange.trim();
@@ -67,6 +67,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                         } else {
                             weeksInRange.push(weekRange);
                         }
+                        
                     });
                     
                     if (weeksInRange.some(w => isWeekInRange(w, week))) {
@@ -170,10 +171,15 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
         
         if (occupiedWeeksBySelected.length > 0) {
             return `Занято (${formatWeeks(occupiedWeeksBySelected)})`;
-        } else if (freeWeeks.length > 0) {
+        }
+        if (freeWeeks.length > 0) {
             return `Свободно (${formatWeeks(freeWeeks)})`;
         }
         return '';
+        // if (freeWeeks.length > 0) {
+        //     return `Свободные недели: (${formatWeeks(freeWeeks)})`;
+        // }
+        // return '';
     };
     
     const getCellClass = (isConflict, occupiedWeeksBySelected) => {
@@ -235,12 +241,12 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                     </div>
                 </div>
                 
-                {!isFilterReady ? (
-                    <div style={{marginTop: "20px"}} className="notification">
-                        Пожалуйста, введите значения для недели
-                        и {windowChange === 1 ? 'аудитории' : windowChange === 2 ? 'группы' : 'аудитории'}.
-                    </div>
-                ) : (
+                {/*{!isFilterReady ? (*/}
+                {/*    <div style={{marginTop: "20px"}} className="notification">*/}
+                {/*        Пожалуйста, введите значения для недели*/}
+                {/*        и {windowChange === 1 ? 'аудитории' : windowChange === 2 ? 'группы' : 'аудитории'}.*/}
+                {/*    </div>*/}
+                {/*) : (*/}
                     <div className="table__body">
                         <div className="schedule-container">
                             <div className="header cell">Часы</div>
@@ -256,6 +262,12 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                                         const cellClass = getCellClass(isConflict, occupiedWeeksBySelected);
                                         const cellContent = getCellContent(occupiedWeeksBySelected, occupiedWeeksByOther, week);
                                         
+                                        if (classroom && windowChange !== 3){
+                                            const hasMatchingAuditory = data.some(entry =>
+                                                entry.time === time && entry.day === day && entry.auditory.includes(classroom)
+                                            )
+                                        }
+                                        
                                         return (
                                             <div
                                                 key={dayIndex}
@@ -263,7 +275,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                                                 onClick={() => handleCellClick(day, time)}
                                             
                                             >
-                                                {isConflict ? '' : cellContent}
+                                                {cellContent}
                                             </div>
                                         );
                                     })}
@@ -271,7 +283,7 @@ const MainTable = ({ data, selectedTeacher, selectedGroup, selectedAuditory, win
                             ))}
                         </div>
                     </div>
-                )}
+                {/*)}*/}
             </div>
         </div>
     );

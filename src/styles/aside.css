@@ -1,0 +1,40 @@
+.aside{
+    border: 2px solid #000;
+    border-radius: 10px;
+
+    width: 20vw;
+    height: 40vh;
+
+    margin: 5vh 0 0 5vh;
+    padding: 30px;
+
+    overflow: hidden;
+
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+input{
+    border: none;
+    border-bottom: 2px solid #000;
+}
+
+ul{
+    list-style: none;
+
+    margin-top: 10px;
+}
+
+li{
+    display: flex;
+
+    font-size: 24px;
+    font-family: sans-serif;
+    font-weight: 600;
+
+    margin-top: 15px;
+}
+
+li > div{
+    margin-left: 10px;
+}

@@ -1,0 +1,18 @@
+
+
+.tableSchedule {
+    border-collapse: collapse;
+    width: 90%;
+    margin-top: 5vh;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}

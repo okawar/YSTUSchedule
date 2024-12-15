@@ -1,0 +1,21 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container{
+  max-width: 90vw;
+  height: 90vh;
+  margin: 3vh auto 5vh ;
+  border: 1px solid #000;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.wrapper{
+  display: flex;
+}

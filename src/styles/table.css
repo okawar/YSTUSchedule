@@ -1,0 +1,70 @@
+.table{
+    font-family: sans-serif;
+
+    border: 2px solid #000;
+    border-radius: 15px;
+
+    width: fit-content;
+    height: fit-content;
+
+    margin: 5vh 0 0 5vh;
+    padding: 5vh 0 4vh 5vh;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        "input teacher department"
+        "input teacher department"
+        "input teacher buttons";
+    /* gap: 10px; */
+
+    border: 2px solid #000;
+    border-radius: 15px;
+
+    width: 90%;
+    
+    padding-left: 5vw;
+}
+
+.input-cell {
+    grid-area: input;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    /* border: 1px solid #ccc;  */
+    padding: 10px; 
+}
+
+.teacher-cell {
+    grid-area: teacher;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;*/ 
+    padding: 10px; 
+}
+
+.department-cell {
+    grid-area: department;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc; */
+    padding: 10px 0 0 20px;  
+}
+
+.buttons-cell {
+    grid-area: buttons;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc; */
+    padding: 10px; 
+}
+
+.header button {
+    margin: 5px;
+}

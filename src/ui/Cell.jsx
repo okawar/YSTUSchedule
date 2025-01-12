@@ -15,8 +15,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return (isSelectedTeacher && isSelectedGroup && isSelectedAuditory && isInWeeks);
@@ -33,8 +39,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return (isSelectedTeacher && isSelectedGroup && isInWeeks);
@@ -51,8 +63,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return (isSelectedTeacher && isSelectedAuditory && isInWeeks);
@@ -69,8 +87,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return (isSelectedGroup && isSelectedAuditory && isInWeeks);
@@ -85,8 +109,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return isSelectedTeacher && isInWeeks;
@@ -101,8 +131,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return isSelectedGroup && isInWeeks;
@@ -117,8 +153,14 @@ export default function Cell({ data, schedule, timeSlot, weekDay, weeks }) {
 
       const isInWeeks = weeks.split(',').some(weekRange => {
         const [start, end] = weekRange.split('-').map(Number);
-        const cellWeek = parseInt(cell.week.split('-')[0]);
-        return cellWeek >= start && cellWeek <= (end || start);
+        const cellWeeks = cell.week.split('-').map(Number);
+  
+        const cellStart = cellWeeks[0];
+        const cellEnd = cellWeeks[1] || cellWeeks[0];
+        const rangeStart = start;
+        const rangeEnd = end || start;
+  
+        return cellStart <= rangeEnd && cellEnd >= rangeStart;
       });
 
       return isSelectedAuditory && isInWeeks;

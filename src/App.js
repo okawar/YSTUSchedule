@@ -36,10 +36,10 @@ function App() {
   }) 
 
   const [schedule, setSchedule] = useState([
-    {week: "1-4", time: "10:10-11:40", teacherId: 1, auditoryId: 1, groupId: 2, business: true, day: "пн", subject: "Математика"},
-    {week: "3", time: "10:10-11:40", teacherId: 2, auditoryId: 2, groupId: 1, business: true, day: "вт", subject: "Физика"},
-    {week: "5-7", time: "14:00-15:30", teacherId: 2, auditoryId: 1, groupId: 2, business: true, day: "ср", subject: "Химия"},
-    {week: "5-7", time: "14:00-15:30", teacherId: 3, auditoryId: 1, groupId: 1, business: true, day: "ср", subject: "Химия"},
+    {week: "1-4", time: "10:10-11:40", teacherId: 1, auditoryId: 1, groupId: 2, business: true, day: "Понедельник", subject: "Математика"},
+    {week: "3", time: "10:10-11:40", teacherId: 2, auditoryId: 2, groupId: 1, business: true, day: "Вторник", subject: "Физика"},
+    {week: "5-7", time: "14:00-15:30", teacherId: 2, auditoryId: 1, groupId: 2, business: true, day: "Среда", subject: "Химия"},
+    {week: "5-7", time: "14:00-15:30", teacherId: 3, auditoryId: 1, groupId: 1, business: true, day: "Воскресенье", subject: "Химия"},
   ]);
   
 

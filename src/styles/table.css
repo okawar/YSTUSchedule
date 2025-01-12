@@ -4,11 +4,14 @@
     border: 2px solid #000;
     border-radius: 15px;
 
-    width: fit-content;
+    width: 60vw;
     height: fit-content;
 
     margin: 5vh 0 0 5vh;
-    padding: 5vh 0 4vh 5vh;
+    padding: 2vh 0 4vh 5vh;
+    
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .header {
@@ -19,52 +22,45 @@
         "input teacher department"
         "input teacher department"
         "input teacher buttons";
-    /* gap: 10px; */
 
-    border: 2px solid #000;
     border-radius: 15px;
 
     width: 90%;
-    
-    padding-left: 5vw;
+
+    font-weight: 600;
 }
 
 .input-cell {
     grid-area: input;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    /* border: 1px solid #ccc;  */
     padding: 10px; 
 }
 
 .teacher-cell {
     grid-area: teacher;
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ccc;*/ 
     padding: 10px; 
+}
+
+.teacher-cell > div{
+    padding-bottom: 5px;
+
+    border-bottom: 2px solid #000;
+    width: 8vw;
 }
 
 .department-cell {
     grid-area: department;
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ccc; */
     padding: 10px 0 0 20px;  
+    margin: 5px;
 }
 
 .buttons-cell {
     grid-area: buttons;
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ccc; */
     padding: 10px; 
 }
 
 .header button {
-    margin: 5px;
+    margin-left: 5px;
+
+    width: 20px;
+    height: 20px;
 }

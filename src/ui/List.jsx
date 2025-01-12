@@ -1,5 +1,7 @@
 import React from 'react';
 
+import "../styles/list.css"
+
 const List = ({ selectedElement, selectedFromCheckBox, setElementsFromCheckBox, type, removeElement  }) => {
   const handleCheckboxChange = (element) => {
     setElementsFromCheckBox(type, (prevElements) => {
@@ -28,7 +30,7 @@ const List = ({ selectedElement, selectedFromCheckBox, setElementsFromCheckBox, 
               checked={Array.isArray(selectedFromCheckBox) && selectedFromCheckBox.some(e => e.id === element.id)}
             />
             <div>{element.name}</div>
-            <button onClick={() => handleRemoveElement(element)}>Удалить</button>
+            <button onClick={() => handleRemoveElement(element)}>X</button>
           </li>
         ))}
       </ul>

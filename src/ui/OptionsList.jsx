@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import "../styles/optionsList.css"
+
 export default function OptionsList(props) {
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -18,7 +20,7 @@ export default function OptionsList(props) {
 
   return (
     <div>
-      <label htmlFor={`${props.title}`}>{`Выберите ${props.title}`}</label>
+      <label htmlFor={`${props.title}`}>{`Выберите элемент (-ы) из списка`}</label>
       <select
         name={`${props.title}`}
         value={selectedValue} // Привязываем значение к состоянию

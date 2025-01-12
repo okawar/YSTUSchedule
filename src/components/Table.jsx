@@ -11,7 +11,7 @@ export default function Table({ data, weeks, setWeeks }) {
     "15:40-17:10",
     "17:20-19:00",
   ];
-  const weekDay = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
+  const weekDay = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
 
   const {
     teacherData,
@@ -68,22 +68,24 @@ export default function Table({ data, weeks, setWeeks }) {
           style={{ paddingTop: "20px", paddingLeft: "20px" }}
           className="teacher-cell"
         >
+
+          <p style={{marginTop: "-15px"}}>Выбранные элементы</p>
           {selectedData.teachersFromCheckBox.map((element, index) => (
             <div key={index} style={{ paddingTop: "10px" }}>
               {element.name}
-              <button onClick={() => handleRemoveElement('teachersFromCheckBox', element)}>Удалить</button>
+              <button onClick={() => handleRemoveElement('teachersFromCheckBox', element)}>X</button>
             </div>
           ))}
           {selectedData.groupsFromCheckBox.map((element, index) => (
             <div key={index} style={{ paddingTop: "10px" }}>
               {element.name}
-              <button onClick={() => handleRemoveElement('groupsFromCheckBox', element)}>Удалить</button>
+              <button onClick={() => handleRemoveElement('groupsFromCheckBox', element)}>X</button>
             </div>
           ))}
           {selectedData.auditoriesFromCheckBox.map((element, index) => (
             <div key={index} style={{ paddingTop: "10px" }}>
               {element.name}
-              <button onClick={() => handleRemoveElement('auditoriesFromCheckBox', element)}>Удалить</button>
+              <button onClick={() => handleRemoveElement('auditoriesFromCheckBox', element)}>X</button>
             </div>
           ))}
         </div>

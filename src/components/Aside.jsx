@@ -53,7 +53,7 @@ export default function Aside({ data, title, setTitle }) {
 
   if (pageSwitcher == 0) {
     return (
-      <div className="aside">
+      <div className="asideStart">
         <h2>Выберите категорию</h2>
 
         <button
@@ -91,7 +91,7 @@ export default function Aside({ data, title, setTitle }) {
         <Title title={title} />
 
         <div>
-          <input value={searchText} onChange={handleSearchChange} type="text" />
+          <input value={searchText} onChange={handleSearchChange} type="text" placeholder="Поиск..." />
         </div>
         <div>
           <OptionsList
@@ -111,9 +111,7 @@ export default function Aside({ data, title, setTitle }) {
             removeElement={handleRemoveElement}
           />
         </div>
-        <div>
           <button onClick={() => clearList("teachers")}>Очистить</button>
-        </div>
       </div>
     );
   }

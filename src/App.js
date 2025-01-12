@@ -14,13 +14,14 @@ function App() {
   const [groupData, setGroupData] = useState({
     group1: {id: 1, name: "ЦИС-38", pulpit: "ИС"},
     group2: {id: 2, name: "ЭЭ-12", pulpit: "ЭЭ"},
-    group3: {id: 2, name: "ЭЭ-22", pulpit: "ЭЭ"},
+    group3: {id: 3, name: "ЭЭ-22", pulpit: "ЭЭ"},
   })
 
   const [auditoryData, setAuditoryData] = useState({
     auditory1: {id: 1, name: "Г-101", building: "Г"},
     auditory2: {id: 2, name: "А-332", building: "А"},
-    auditory3: {id: 2, name: "А-331", building: "А"},
+    auditory3: {id: 3, name: "А-331", building: "А"},
+    auditory4: {id: 4, name: "А-331", building: "А"},
   })
 
   const [title, setTitle] = useState()
@@ -109,27 +110,6 @@ const handleClick = (cell) => {
   }
 };
 
-const isValidSchedule = (newSchedule) => {
-  const seen = new Set();
-  for (const item of newSchedule) {
-    const key = `${item.teacherId}-${item.auditoryId}-${item.groupId}`;
-    if (seen.has(key)) {
-      return false;
-    }
-    seen.add(key);
-  }
-  return true;
-};
-
-const addScheduleItem = (newItem) => {
-  const newSchedule = [...schedule, newItem];
-  if (isValidSchedule(newSchedule)) {
-    setSchedule(newSchedule);
-  } else {
-    console.error('Schedule conflict detected!');
-  }
-};
-
 
 
   return (
@@ -148,7 +128,8 @@ const addScheduleItem = (newItem) => {
               setElementsFromCheckBox,
               setSelectedData,
               selectedCell,
-              setSelectedCell
+              setSelectedCell,
+              schedule
             }}
             title={title}
             setTitle={setTitle}

@@ -15,6 +15,7 @@ export default function Aside({ data, title, setTitle }) {
     clearList,
     setElementsFromCheckBox,
     selectedCell,
+    schedule
   } = data;
 
   const [pageSwitcher, setPageSwitcher] = useState(0);
@@ -181,31 +182,60 @@ export default function Aside({ data, title, setTitle }) {
     );
   }
   if (pageSwitcher === 4) {
+    // Получаем ID преподавателей, выбранных через чекбоксы
+    const selectedTeacherIdsFromCheckBox = selectedData.teachersFromCheckBox.map(
+      (teacher) => teacher.id
+    );
+  
+    // День, связанный с выбранной ячейкой
+    const selectedDay = selectedCell[0]?.day;
+  
+    // Фильтруем расписание: только выбранные преподаватели и указанный день
+    const filteredSchedule = schedule.filter(
+      (item) =>
+        selectedTeacherIdsFromCheckBox.includes(item.teacherId) &&
+        item.day === selectedDay
+    );
+  
     return (
       <div className="aside">
-        
         <button onClick={() => setPageSwitcher(0)}>Назад</button>
-        <h2>Расписание на {selectedCell[0]?.day}</h2>
-        {selectedCell.map((cell, index) => (
-          <div style={{marginTop: "20px"}} key={index}>
-            <div>
-              <strong>Преподаватель:</strong> {cell.teacherName}
+        <h2>Расписание на {selectedDay}</h2>
+  
+        {filteredSchedule.length > 0 ? (
+          filteredSchedule.map((cell, index) => (
+            <div style={{ marginTop: "20px" }} key={index}>
+              <div>
+                <strong>Преподаватель:</strong>{" "}
+                {teacherData[`teacher${cell.teacherId}`]?.name || "Неизвестно"}
+              </div>
+              <div>
+                <strong>Предмет:</strong> {cell.subject}
+              </div>
+              <div>
+                <strong>Группа:</strong>{" "}
+                {groupData[`group${cell.groupId}`]?.name || "Неизвестно"}
+              </div>
+              <div>
+                <strong>Аудитория:</strong>{" "}
+                {auditoryData[`auditory${cell.auditoryId}`]?.name || "Неизвестно"}{" "}
+                ({auditoryData[`auditory${cell.auditoryId}`]?.building || "—"})
+              </div>
+              <div>
+                <strong>Время:</strong> {cell.time} ({cell.week})
+              </div>
             </div>
-            <div>
-              <strong>Предмет:</strong> {cell.subject}
-            </div>
-            <div>
-              <strong>Группа:</strong> {cell.groupName}
-            </div>
-            <div>
-              <strong>Аудитория:</strong> {cell.auditoryName} ({cell.building})
-            </div>
-            <div>
-              <strong>Время:</strong> {cell.day} ({cell.time})
-            </div>
+          ))
+        ) : (
+          <div style={{ marginTop: "20px" }}>
+            <p>Нет занятий для выбранных преподавателей в этот день.</p>
           </div>
-        ))}
+        )}
       </div>
     );
   }
+  
+  
+  
+  
 }

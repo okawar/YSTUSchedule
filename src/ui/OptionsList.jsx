@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function OptionsList(props) {
+  const [selectedValue, setSelectedValue] = useState("");
+
   const filteredData = Object.entries(props.Data).filter(([Key, Obj]) =>
     Obj.name.toLowerCase().includes(props.searchText.toLowerCase())
   );
@@ -9,12 +11,18 @@ export default function OptionsList(props) {
     ObjA.name.localeCompare(ObjB.name)
   );
 
+  const handleChange = (value) => {
+    props.addElement(value); // Добавляем элемент в список
+    setSelectedValue(""); // Сбрасываем выбранное значение к дефолтному
+  };
+
   return (
     <div>
       <label htmlFor={`${props.title}`}>{`Выберите ${props.title}`}</label>
       <select
         name={`${props.title}`}
-        onChange={(e) => props.addElement(e.target.value)}
+        value={selectedValue} // Привязываем значение к состоянию
+        onChange={(e) => handleChange(e.target.value)}
       >
         <option value="" disabled>
           Выберите элемент
